@@ -1,16 +1,20 @@
-# Compiled class file
+### Java / Maven ###
+target/
 *.class
 
-# Log file
-*.log
+### NetBeans ###
+build/
+dist/
+nbbuild/
+nbdist/
+nbproject/private/
+.nb-gradle/
 
-# BlueJ files
-*.ctxt
+### Office / documentos - lock files temporales ###
+~$*
+*.tmp
 
-# Mobile Tools for Java (J2ME)
-.mtj.tmp/
-
-# Package Files #
+# Package Files
 *.jar
 *.war
 *.nar
@@ -19,6 +23,47 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# JVM crash logs
 hs_err_pid*
 replay_pid*
+
+### Logs ###
+*.log
+
+### IDE - IntelliJ ###
+.idea/
+*.iws
+*.iml
+*.ipr
+out/
+
+### IDE - Eclipse ###
+.settings/
+.classpath
+.project
+bin/
+
+### IDE - VS Code ###
+.vscode/
+
+### BlueJ ###
+*.ctxt
+
+### OS - Windows ###
+Thumbs.db
+desktop.ini
+ehthumbs.db
+
+### OS - macOS ###
+.DS_Store
+.AppleDouble
+.LSOverride
+
+### OS - Linux ###
+*~
+.directory
+.Trash-*
+
