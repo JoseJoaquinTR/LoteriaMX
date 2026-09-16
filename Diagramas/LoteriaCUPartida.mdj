@@ -17392,20 +17392,21 @@
 															"_parent": {
 																"$ref": "AAAAAAGgqJk0GKl4LfY="
 															},
-															"visible": false,
 															"font": "Arial;13;0",
 															"parentStyle": true,
 															"left": 388,
 															"top": 1734,
-															"height": 13
+															"width": 85.0458984375,
+															"height": 13,
+															"text": "[JugadaValida]"
 														}
 													],
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 368,
 													"top": 1719,
-													"width": 976,
-													"height": 249,
+													"width": 888,
+													"height": 225,
 													"guardLabel": {
 														"$ref": "AAAAAAGgqJk0GKl5MVo="
 													}
@@ -17426,19 +17427,20 @@
 															"_parent": {
 																"$ref": "AAAAAAGgqJl8JqmEUEo="
 															},
-															"visible": false,
 															"font": "Arial;13;0",
 															"parentStyle": true,
 															"left": 388,
-															"top": 1983,
-															"height": 13
+															"top": 1959,
+															"width": 32.5126953125,
+															"height": 13,
+															"text": "[Else]"
 														}
 													],
 													"font": "Arial;13;0",
 													"parentStyle": true,
 													"left": 368,
-													"top": 1968,
-													"width": 976,
+													"top": 1944,
+													"width": 888,
 													"height": 43,
 													"guardLabel": {
 														"$ref": "AAAAAAGgqJl8JqmF/fk="
@@ -17449,15 +17451,15 @@
 											"parentStyle": true,
 											"left": 368,
 											"top": 1719,
-											"width": 976,
-											"height": 292
+											"width": 888,
+											"height": 268
 										}
 									],
 									"font": "Arial;13;0",
 									"parentStyle": false,
 									"left": 368,
 									"top": 1696,
-									"width": 976,
+									"width": 888,
 									"height": 528,
 									"nameLabel": {
 										"$ref": "AAAAAAGgqJk0D6lqiog="
@@ -18715,7 +18717,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGgqJk0D6lnxqU="
 									},
-									"name": "Operand1"
+									"name": "Operand1",
+									"guard": "JugadaValida"
 								},
 								{
 									"_type": "UMLInteractionOperand",
@@ -18723,7 +18726,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGgqJk0D6lnxqU="
 									},
-									"name": "InteractionOperand1"
+									"name": "InteractionOperand1",
+									"guard": "Else"
 								}
 							]
 						}
