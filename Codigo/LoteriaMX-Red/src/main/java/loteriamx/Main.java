@@ -9,14 +9,21 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
        
-        Casilla[] casillas = new Casilla[16];
+        //  matriz bidimensional de 4x4
+        Casilla[][] casillas = new Casilla[4][4];
+
         for (int f = 0; f < 4; f++) {
             for (int c = 0; c < 4; c++) {
-                int idx = f * 4 + c;
-                casillas[idx] = new Casilla(f, c, new Carta(idx + 1, "Carta" + (idx + 1), null));
+                
+                int numeroCarta = (f * 4 + c) + 1;
+
+               
+                casillas[f][c] = new Casilla(f, c, new Carta(numeroCarta, "Carta" + numeroCarta, null));
             }
         }
+
         Tablero tablero = new Tablero(casillas);
+
         
         Puntaje puntaje = new Puntaje();
         ModeloPartida modelo = new ModeloPartida(new DominioLoteria(), 0, tablero, puntaje);
