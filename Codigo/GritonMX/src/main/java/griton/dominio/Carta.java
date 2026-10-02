@@ -1,18 +1,23 @@
-package griton;
+package griton.dominio;
 
-/**
- * Cartas del mazo 
- */
-public class Carta {
+import java.io.Serializable;
+
+public class Carta implements Serializable {
 
     private final int numero;
     private final String nombre;
-    private final String imagen;
+    private final String imagen; 
+    private boolean disponible;
 
     public Carta(int numero, String nombre, String imagen) {
         this.numero = numero;
         this.nombre = nombre;
         this.imagen = imagen;
+        this.disponible = true;
+    }
+
+    public void cantar() {
+        this.disponible = false;
     }
 
     public int getNumero() {
@@ -25,6 +30,10 @@ public class Carta {
 
     public String getImagen() {
         return imagen;
+    }
+
+    public boolean isDisponible() {
+        return disponible;
     }
 
     @Override

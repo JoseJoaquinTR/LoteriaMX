@@ -1,5 +1,6 @@
 package griton;
 
+import griton.dominio.Carta;
 import java.io.IOException;
 /**
  *  Griton Api

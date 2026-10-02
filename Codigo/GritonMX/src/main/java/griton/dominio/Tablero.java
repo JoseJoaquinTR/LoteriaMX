@@ -1,4 +1,4 @@
-package loteriamx.dominio;
+package griton.dominio;
 
 import java.io.Serializable;
 

@@ -1,6 +1,6 @@
 package loteriamx.modelo;
 
-import loteriamx.dominio.*;
+import griton.dominio.*;
 import java.util.ArrayList;
 import java.util.List;
 

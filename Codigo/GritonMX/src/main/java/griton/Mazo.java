@@ -1,5 +1,6 @@
 package griton;
 
+import griton.dominio.Carta;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

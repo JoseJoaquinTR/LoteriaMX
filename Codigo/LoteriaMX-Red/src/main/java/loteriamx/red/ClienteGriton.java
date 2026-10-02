@@ -1,6 +1,6 @@
 package loteriamx.red;
 
-import loteriamx.dominio.Carta;
+import griton.dominio.Carta;
 import loteriamx.modelo.ModeloPartida;
 
 import java.io.BufferedReader;

@@ -16,6 +16,14 @@
         <exec.mainClass>loteriamx.Main</exec.mainClass>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>mx.loteria</groupId>
+            <artifactId>GritonMX</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <finalName>LoteriaMX-Red</finalName>
         <plugins>

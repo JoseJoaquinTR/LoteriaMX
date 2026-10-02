@@ -1,7 +1,7 @@
 package loteriamx.modelo;
 
-import loteriamx.dominio.Casilla;
-import loteriamx.dominio.TipoJugada;
+import griton.dominio.Casilla;
+import griton.dominio.TipoJugada;
 import java.io.IOException;
 
 /**

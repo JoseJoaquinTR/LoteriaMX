@@ -2,8 +2,8 @@ package loteriamx.red;
 
 import loteriamx.modelo.ModeloPartida;
 import loteriamx.modelo.IEmisorRed;
-import loteriamx.dominio.Casilla;
-import loteriamx.dominio.TipoJugada;
+import griton.dominio.Casilla;
+import griton.dominio.TipoJugada;
 
 import java.io.*;
 import java.net.Socket;

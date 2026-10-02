@@ -1,6 +1,6 @@
 package loteriamx;
 
-import loteriamx.dominio.*;
+import griton.dominio.*;
 import loteriamx.modelo.ModeloPartida;
 import loteriamx.red.ClienteGriton;
 

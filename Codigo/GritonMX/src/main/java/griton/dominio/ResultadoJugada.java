@@ -1,4 +1,4 @@
-package loteriamx.dominio;
+package griton.dominio;
 
 
 public enum ResultadoJugada {
