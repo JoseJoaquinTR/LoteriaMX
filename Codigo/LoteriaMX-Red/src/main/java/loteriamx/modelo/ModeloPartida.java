@@ -2,7 +2,10 @@ package loteriamx.modelo;
 
 import griton.dominio.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * ModeloPartida.
@@ -17,6 +20,7 @@ public class ModeloPartida {
     private final Tablero tablero; 
     private final Puntaje puntaje;
 
+    private final Map<Integer, Jugador> jugadoresRemotos = new LinkedHashMap<>();
     private final List<Carta> historialCartas = new ArrayList<>();
     private Carta cartaActual;
     private Casilla casillaMarcada;
@@ -49,9 +53,45 @@ public class ModeloPartida {
         this.emisorRed = emisorRed;
     }
 
-    private void update() {
+    public void agregarJugadorRemoto(Jugador jugador) {
+        jugadoresRemotos.put(jugador.getId(), jugador);
+        idJugadorAfectado = jugador.getId();
+        notificarTableroJugador();
+    }
+
+    private void notificarCarta() {
         if (observador != null) {
-            observador.update(this);
+            observador.updateCarta(this);
+        }
+    }
+
+    private void notificarHistorial() {
+        if (observador != null) {
+            observador.updateHistorial(this);
+        }
+    }
+
+    private void notificarCasilla() {
+        if (observador != null) {
+            observador.updateCasilla(this);
+        }
+    }
+
+    private void notificarJugada() {
+        if (observador != null) {
+            observador.updateJugada(this);
+        }
+    }
+
+    private void notificarTableroJugador() {
+        if (observador != null) {
+            observador.updateTableroJugador(this);
+        }
+    }
+
+    private void notificarMensaje() {
+        if (observador != null) {
+            observador.updateMensaje(this);
         }
     }
 
@@ -61,13 +101,14 @@ public class ModeloPartida {
         if (cartaRecibida == null) {
             mensaje = "Ya no quedan cartas en el mazo";
             cartaActual = null;
-            update();
+            notificarMensaje();
             return;
         }
         dominio.guardarCartaHistorial(cartaRecibida);
         cartaActual = cartaRecibida;
         historialCartas.add(cartaRecibida);
-        update();
+        notificarCarta();
+        notificarHistorial();
     }
 
     // Flujo seleccionar casilla 
@@ -77,18 +118,20 @@ public class ModeloPartida {
         if (ok) {
             casillaMarcada = casillaSeleccionada;
             idJugadorAfectado = idJugadorLocal;
+            notificarCasilla();
             if (emisorRed != null) {
                 try {
                     emisorRed.enviarCasillaMarcada(casillaSeleccionada);
                 } catch (java.io.IOException e) {
                     mensaje = "No se pudo avisar a los demas jugadores (revisa la conexion)";
+                    notificarMensaje();
                 }
             }
         } else {
             casillaMarcada = null;
             mensaje = "Esa casilla no corresponde a la carta actual, o ya esta marcada";
+            notificarMensaje();
         }
-        update();
     }
 
     // Flujo marcar jugada 
@@ -100,38 +143,50 @@ public class ModeloPartida {
         if (null != resultadoJugada)
             switch (resultadoJugada) {
                 case MARCADA -> {
+                    notificarJugada();
                     if (emisorRed != null) {
                         try {
                             emisorRed.enviarJugada(tipo);
                         } catch (java.io.IOException e) {
                             mensaje = "No se pudo avisar a los demas jugadores (revisa la conexion)";
+                            notificarMensaje();
                         }
                     }
                 }
-                case NO_VALIDA ->
+                case NO_VALIDA -> {
                     mensaje = "Ese puntaje no esta realmente completo";
-                case NO_DISPONIBLE ->
+                    notificarMensaje();
+                }
+                case NO_DISPONIBLE -> {
                     mensaje = "Ese puntaje ya fue reclamado antes";
+                    notificarMensaje();
+                }
                 default -> {
                 }
             }
-        update();
     }
 
     // Flujo jugada de otro jugador 
     public void updateCasilla(int idJugadorRemoto, Casilla casillaRemota) {
-        casillaMarcada = casillaRemota;
+        Jugador jugador = jugadoresRemotos.get(idJugadorRemoto);
+        if (jugador == null) {
+            return;
+        }
+        jugador.marcarCasilla(casillaRemota.getFila(), casillaRemota.getColumna());
         idJugadorAfectado = idJugadorRemoto;
         mensaje = null;
-        update();
+        notificarTableroJugador();
     }
 
     public void updateJugada(int idJugadorRemoto, TipoJugada tipoRemoto) {
-        jugadaActual = tipoRemoto;
-        resultadoJugada = ResultadoJugada.MARCADA;
+        Jugador jugador = jugadoresRemotos.get(idJugadorRemoto);
+        if (jugador == null) {
+            return;
+        }
+        jugador.marcarJugada(tipoRemoto);
         idJugadorAfectado = idJugadorRemoto;
         mensaje = null;
-        update();
+        notificarTableroJugador();
     }
 
 
@@ -170,5 +225,13 @@ public class ModeloPartida {
 
     public Puntaje getPuntaje() {
         return puntaje;
+    }
+
+    public Jugador getJugadorRemoto(int idJugador) {
+        return jugadoresRemotos.get(idJugador);
+    }
+
+    public Collection<Jugador> getJugadoresRemotos() {
+        return jugadoresRemotos.values();
     }
 }

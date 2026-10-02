@@ -1,58 +1,52 @@
 package loteriamx;
 
 import griton.dominio.*;
+import loteriamx.control.Controlador;
 import loteriamx.modelo.ModeloPartida;
 import loteriamx.red.ClienteGriton;
 
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) throws Exception {
-       
-        //  matriz bidimensional de 4x4
-        Casilla[][] casillas = new Casilla[4][4];
+    private static final String HOST_GRITON = "localhost";
+    private static final int PUERTO_GRITON = 5000;
+    private static final int ID_JUGADOR_LOCAL = 0;
 
+    public static void main(String[] args) {
+        Tablero tablero = crearTablero();
+        Puntaje puntaje = new Puntaje();
+        ModeloPartida modelo = new ModeloPartida(new DominioLoteria(), ID_JUGADOR_LOCAL, tablero, puntaje);
+        Controlador controlador = new Controlador(modelo);
+
+        conectarGriton(modelo);
+    }
+
+    private static Tablero crearTablero() {
+        Casilla[][] casillas = new Casilla[4][4];
         for (int f = 0; f < 4; f++) {
             for (int c = 0; c < 4; c++) {
-                
                 int numeroCarta = (f * 4 + c) + 1;
-
-               
                 casillas[f][c] = new Casilla(f, c, new Carta(numeroCarta, "Carta" + numeroCarta, null));
             }
         }
+        return new Tablero(casillas);
+    }
 
-        Tablero tablero = new Tablero(casillas);
-
-        
-        Puntaje puntaje = new Puntaje();
-        ModeloPartida modelo = new ModeloPartida(new DominioLoteria(), 0, tablero, puntaje);
-
-        modelo.agregarObserver(m -> {
-            if (m.getCarta() != null) {
-                System.out.println("[CARTA] " + m.getCarta().getNombre());
-            }
-            if (m.getCasillaMarcada() != null) {
-                System.out.println("[CASILLA] jugador " + m.getIdJugadorAfectado()+ " marco fila " + m.getCasillaMarcada().getFila() + " col " + m.getCasillaMarcada().getColumna());
-            }
-            if (m.getJugada() != null && m.getResultadoJugada() == ResultadoJugada.MARCADA) {
-                System.out.println("[JUGADA] jugador " + m.getIdJugadorAfectado()+ " reclamo " + m.getJugada());
-            }
-            if (m.getMensaje() != null) {
-                System.out.println("[MENSAJE] " + m.getMensaje());
-            }
-        });
-
+    private static void conectarGriton(ModeloPartida modelo) {
         try {
+            /*SwingUtilities.invokeLater(new Runnable() {
+                public void run() {
+                    FrmPartida frm = new FrmPartida(modelo, controlador);
+                    frm.setVisible(true);
+                    conectarGriton(modelo);
+                }
+            });*/
             ClienteGriton griton = new ClienteGriton(modelo);
-            griton.conectar("localhost", 5000);
-            
-            System.out.println("Conectado al Griton en localhost:5000");
-            
-        } catch (java.io.IOException e) {
+            griton.conectar(HOST_GRITON, PUERTO_GRITON);
+            System.out.println("Conectado al Griton en " + HOST_GRITON + ":" + PUERTO_GRITON);
+        } catch (IOException e) {
             System.out.println("No se pudo conectar al Griton: " + e.getMessage());
         }
-        System.out.println("Escuchando. Presiona ENTER para salir");
-        System.in.read();
     }
 }
