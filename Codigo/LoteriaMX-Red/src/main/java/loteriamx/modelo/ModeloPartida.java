@@ -10,15 +10,14 @@ import java.util.Map;
 /**
  * ModeloPartida.
  */
-public class ModeloPartida {
+public class ModeloPartida implements IModelo {
 
     private final IDominio dominio;
     private IObservador observador;
     private IEmisorRed emisorRed; 
 
-    private final int idJugadorLocal;
-    private final Tablero tablero; 
-    private final Puntaje puntaje;
+    private final Jugador jugadorLocal;
+    private final Nivel nivel;
 
     private final Map<Integer, Jugador> jugadoresRemotos = new LinkedHashMap<>();
     private final List<Carta> historialCartas = new ArrayList<>();
@@ -29,15 +28,14 @@ public class ModeloPartida {
     private int idJugadorAfectado;
     private String mensaje;
 
-    public ModeloPartida(IDominio dominio, int idJugadorLocal, Tablero tablero, Puntaje puntaje) {
+    public ModeloPartida(IDominio dominio, Jugador jugadorLocal, Nivel nivel) {
         this.dominio = dominio;
-        this.idJugadorLocal = idJugadorLocal;
-        this.tablero = tablero;
-        this.puntaje = puntaje;
+        this.jugadorLocal = jugadorLocal;
+        this.nivel = nivel;
     }
 
     /**
-     *  FrmPartida se suscribe al crearse.
+     * Main suscribe a FrmPartida al crearla.
      * @param observador
      */
     public void agregarObserver(IObservador observador) {
@@ -117,7 +115,7 @@ public class ModeloPartida {
         boolean ok = dominio.marcarCasilla(casillaSeleccionada, cartaActual);
         if (ok) {
             casillaMarcada = casillaSeleccionada;
-            idJugadorAfectado = idJugadorLocal;
+            idJugadorAfectado = jugadorLocal.getId();
             notificarCasilla();
             if (emisorRed != null) {
                 try {
@@ -138,8 +136,8 @@ public class ModeloPartida {
     public void marcarJugada(TipoJugada tipo) {
         mensaje = null;
         jugadaActual = tipo;
-        resultadoJugada = dominio.marcarJugada(tablero, puntaje, tipo);
-        idJugadorAfectado = idJugadorLocal;
+        resultadoJugada = dominio.marcarJugada(jugadorLocal.getTablero(), jugadorLocal.getPuntaje(), tipo);
+        idJugadorAfectado = jugadorLocal.getId();
         if (null != resultadoJugada)
             switch (resultadoJugada) {
                 case MARCADA -> {
@@ -219,12 +217,20 @@ public class ModeloPartida {
         return mensaje;
     }
 
+    public Jugador getJugadorLocal() {
+        return jugadorLocal;
+    }
+
+    public Nivel getNivel() {
+        return nivel;
+    }
+
     public Tablero getTablero() {
-        return tablero;
+        return jugadorLocal.getTablero();
     }
 
     public Puntaje getPuntaje() {
-        return puntaje;
+        return jugadorLocal.getPuntaje();
     }
 
     public Jugador getJugadorRemoto(int idJugador) {

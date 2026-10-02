@@ -9,11 +9,15 @@ import java.io.Serializable;
 public class Jugador implements Serializable {
 
     private final int id;
+    private final String nombre;
+    private final String avatar; 
     private final Tablero tablero;
     private final Puntaje puntaje;
 
-    public Jugador(int id, Tablero tablero, Puntaje puntaje) {
+    public Jugador(int id, String nombre, String avatar, Tablero tablero, Puntaje puntaje) {
         this.id = id;
+        this.nombre = nombre;
+        this.avatar = avatar;
         this.tablero = tablero;
         this.puntaje = puntaje;
     }
@@ -28,6 +32,14 @@ public class Jugador implements Serializable {
 
     public int getId() {
         return id;
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public String getAvatar() {
+        return avatar;
     }
 
     public Tablero getTablero() {

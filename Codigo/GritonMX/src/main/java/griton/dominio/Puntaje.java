@@ -42,7 +42,7 @@ public class Puntaje implements Serializable {
             case LLENA ->
                 todasMarcadas(tablero, todasLasCasillas());
             case CHORRO ->
-                hayFilaCompleta(tablero);
+                hayChorro(tablero);
             case CUATRO_ESQUINAS ->
                 todasMarcadas(tablero, new int[][]{{0, 0}, {0, 3}, {3, 0}, {3, 3}});
             case CENTRO ->
@@ -52,20 +52,24 @@ public class Puntaje implements Serializable {
         };
     }
 
-    private boolean hayFilaCompleta(Tablero tablero) {
-        for (int fila = 0; fila < 4; fila++) {
-            boolean completa = true;
-            for (int col = 0; col < 4; col++) {
-                if (!tablero.obtenerCasilla(fila, col).estaMarcada()) {
-                    completa = false;
-                    break;
-                }
+    // Chorro: una fila, una columna o una diagonal completa
+    private boolean hayChorro(Tablero tablero) {
+        int[][] diagonal = new int[4][2];
+        int[][] diagonalInversa = new int[4][2];
+        for (int i = 0; i < 4; i++) {
+            int[][] fila = new int[4][2];
+            int[][] columna = new int[4][2];
+            for (int j = 0; j < 4; j++) {
+                fila[j] = new int[]{i, j};
+                columna[j] = new int[]{j, i};
             }
-            if (completa) {
+            if (todasMarcadas(tablero, fila) || todasMarcadas(tablero, columna)) {
                 return true;
             }
+            diagonal[i] = new int[]{i, i};
+            diagonalInversa[i] = new int[]{i, 3 - i};
         }
-        return false;
+        return todasMarcadas(tablero, diagonal) || todasMarcadas(tablero, diagonalInversa);
     }
 
     private int[][] todasLasCasillas() {

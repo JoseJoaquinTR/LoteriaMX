@@ -8,16 +8,22 @@ import java.io.IOException;
 public class Main {
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        String[] nombres = {"El Sol", "La Luna", "El Arbol", "La Dama", "El Catrin","La Bandera", "El Nopal", "La Bota", "El Valiente", "El Pino","La Pera", "La Corona", "El Tambor", "El Corazon", "La Palma", "El Camaron"};
-        
+        String[] nombres = Mazo.NOMBRES_CARTAS;
+
         int puerto = 5000;
         
         ServidorGriton servidor = new ServidorGriton(puerto);
         servidor.aceptarJugadores();
         System.out.println("Griton escuchando en el puerto " + puerto);
 
+        // no gritar hasta que haya al menos 1 jugador
+        System.out.println("Esperando jugadores...");
+        while (servidor.getNumJugadoresConectados() < 1) {
+            Thread.sleep(500);
+        }
+
         Mazo mazo = new Mazo(nombres);
-        int intervaloMs = 8000;                                                             //intervalo de tiempo para gritar la carta 
+        int intervaloMs = 4000; 
 
         while (mazo.hayDisponibles()) {
             System.out.println( (intervaloMs / 1000) + " segundos para la siguiente carta ("+ servidor.getNumJugadoresConectados() + " jugadores conectados)");

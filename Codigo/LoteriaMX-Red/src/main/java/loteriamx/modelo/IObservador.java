@@ -1,19 +1,19 @@
 package loteriamx.modelo;
 
 /**
- * Interfaz IObservador 
+ * Interfaz IObservador. 
  */
 public interface IObservador {
 
-    void updateCarta(ModeloPartida modelo);
+    void updateCarta(IModelo modelo);
 
-    void updateHistorial(ModeloPartida modelo);
+    void updateHistorial(IModelo modelo);
 
-    void updateCasilla(ModeloPartida modelo);
+    void updateCasilla(IModelo modelo);
 
-    void updateJugada(ModeloPartida modelo);
+    void updateJugada(IModelo modelo);
 
-    void updateTableroJugador(ModeloPartida modelo);
+    void updateTableroJugador(IModelo modelo);
 
-    void updateMensaje(ModeloPartida modelo);
+    void updateMensaje(IModelo modelo);
 }
