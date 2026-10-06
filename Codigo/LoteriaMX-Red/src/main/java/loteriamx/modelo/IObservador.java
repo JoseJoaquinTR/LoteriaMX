@@ -5,15 +5,15 @@ package loteriamx.modelo;
  */
 public interface IObservador {
 
-    void updateCarta(IModelo modelo);
+    public void updateCarta(IModelo modelo);
 
-    void updateHistorial(IModelo modelo);
+    public void updateHistorial(IModelo modelo);
 
-    void updateCasilla(IModelo modelo);
+    public void updateCasilla(IModelo modelo);
 
-    void updateJugada(IModelo modelo);
+    public void updateJugada(IModelo modelo);
 
-    void updateTableroJugador(IModelo modelo);
+    public void updateTableroJugador(IModelo modelo);
 
-    void updateMensaje(IModelo modelo);
+    public void updateMensaje(IModelo modelo);
 }

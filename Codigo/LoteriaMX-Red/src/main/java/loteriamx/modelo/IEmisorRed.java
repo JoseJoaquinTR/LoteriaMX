@@ -9,6 +9,6 @@ import java.io.IOException;
  * ManejadorSocket. 
  */
 public interface IEmisorRed {
-    void enviarCasillaMarcada(Casilla casilla) throws IOException;
-    void enviarJugada(TipoJugada tipo) throws IOException;
+    public void enviarCasillaMarcada(Casilla casilla) throws IOException;
+    public void enviarJugada(TipoJugada tipo) throws IOException;
 }

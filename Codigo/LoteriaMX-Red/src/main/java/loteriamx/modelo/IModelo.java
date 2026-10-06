@@ -11,19 +11,19 @@ import java.util.List;
  */
 public interface IModelo {
 
-    Carta getCarta();
+    public Carta getCarta();
 
-    List<Carta> getHistorial();
+    public List<Carta> getHistorial();
 
-    Nivel getNivel();
+    public Nivel getNivel();
 
-    Jugador getJugadorLocal();
+    public Jugador getJugadorLocal();
 
-    Collection<Jugador> getJugadoresRemotos();
+    public Collection<Jugador> getJugadoresRemotos();
 
-    Jugador getJugadorRemoto(int idJugador);
+    public Jugador getJugadorRemoto(int idJugador);
 
-    int getIdJugadorAfectado();
+    public int getIdJugadorAfectado();
 
-    String getMensaje();
+    public String getMensaje();
 }
