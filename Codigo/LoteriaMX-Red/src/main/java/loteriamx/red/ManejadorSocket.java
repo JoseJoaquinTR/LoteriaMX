@@ -1,7 +1,7 @@
 package loteriamx.red;
 
-import loteriamx.modelo.ModeloPartida;
-import loteriamx.modelo.IEmisorRed;
+import mvcjugarpartida.ModeloPartida;
+import mvcjugarpartida.IEmisorRed;
 import griton.dominio.Casilla;
 import griton.dominio.TipoJugada;
 

@@ -1,7 +1,7 @@
 package loteriamx.red;
 
 import griton.dominio.Carta;
-import loteriamx.modelo.ModeloPartida;
+import mvcjugarpartida.ModeloPartida;
 
 import java.io.BufferedReader;
 import java.io.IOException;

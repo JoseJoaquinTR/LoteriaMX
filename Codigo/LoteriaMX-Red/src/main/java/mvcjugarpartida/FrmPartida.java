@@ -1,4 +1,4 @@
-package loteriamx.vista;
+package mvcjugarpartida;
 
 import griton.dominio.Carta;
 import griton.dominio.Jugador;
@@ -13,49 +13,47 @@ import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import loteriamx.control.Controlador;
-import loteriamx.modelo.IModelo;
-import loteriamx.modelo.IObservador;
-
 
 public class FrmPartida extends JFrame implements IObservador {
 
     //colores
-    static final Color MARCO = new Color(0x1E1E1E);
-    static final Color FONDO = new Color(0xFDEAE6);
-    static final Color NARANJA_OPCION = new Color(0xF5A31A);
-    static final Color NARANJA_NOMBRE = new Color(0xF7931E);
-    static final Color CAFE_PUNTAJES = new Color(0xA67C62);
-    static final Color CAFE_NOMBRE = new Color(0x7B3F2E);
-    static final Color ROJO_SALIR = new Color(0xC8101E);
-    static final Color FONDO_AVATAR = new Color(0x9FD3E6);
-    static final Color FONDO_CARTA = new Color(0xFFF8E7);
-    static final Color FRIJOL = new Color(0x6B3A1E);
-    private static final String FUENTE = "Comic Sans MS";
-    private static final int ANCHO_MINIMO = 1100;
+    static Color MARCO = new Color(0x1E1E1E);
+    static Color FONDO = new Color(0xFDEAE6);
+    static Color NARANJA_OPCION = new Color(0xF5A31A);
+    static Color NARANJA_NOMBRE = new Color(0xF7931E);
+    static Color CAFE_PUNTAJES = new Color(0xA67C62);
+    static Color CAFE_NOMBRE = new Color(0x7B3F2E);
+    static Color ROJO_SALIR = new Color(0xC8101E);
+    static Color FONDO_AVATAR = new Color(0x9FD3E6);
+    static Color FONDO_CARTA = new Color(0xFFF8E7);
+    static Color FRIJOL = new Color(0x6B3A1E);
+    private static String FUENTE = "Comic Sans MS";
+    private static int ANCHO_MINIMO = 1100;
 
     // Imagenes
-    private static final Map<String, BufferedImage> imagenes = new HashMap<>();
+    private static Map<String, BufferedImage> imagenes = new HashMap<>();
 
-    private final IModelo modelo;
-    private final Controlador controlador;
+    private Controlador controlador;
 
-    private final PanelCarta panelCarta;
-    private final PanelHistorial panelHistorial;
-    private final PanelTablero panelTablero;
-    private final PanelJugador panelJugador;
-    private final JPanel panelRemotos;
-    private final Map<Integer, JPanel> remotos = new HashMap<>();
-    private final Map<Integer, PanelJugador> datosRemotos = new HashMap<>();
+    private PanelCarta panelCarta;
+    private PanelHistorial panelHistorial;
+    private PanelTablero panelTablero;
+    private PanelJugador panelJugador;
+    private JPanel panelRemotos;
+    private Map<Integer, JPanel> remotos = new HashMap<>();
+    private Map<Integer, PanelJugador> datosRemotos = new HashMap<>();
 
-    public FrmPartida(IModelo modelo, Controlador controlador) {
+    public FrmPartida(Controlador controlador) {
         super("Lotería Mexicana");
-        this.modelo = modelo;
         this.controlador = controlador;
+        setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
 
+    @Override
+    public void updatePartida(IModelo modelo) {
         Jugador local = modelo.getJugadorLocal();
         panelCarta = new PanelCarta(160, 260);
-        panelHistorial = new PanelHistorial(cartasHistorial(), 56, 84);
+        panelHistorial = new PanelHistorial(cartasHistorial(modelo), 56, 84);
         panelTablero = new PanelTablero(local.getTablero(), 62, 92, 3, controlador::marcarCasilla);
         panelJugador = new PanelJugador(local, controlador::marcarJugada);
 
@@ -80,6 +78,13 @@ public class FrmPartida extends JFrame implements IObservador {
         panelCarta.setCarta(modelo.getCarta());
         panelHistorial.setHistorial(new ArrayList<>(modelo.getHistorial()));
 
+        pack();
+        setSize(Math.max(getWidth(), ANCHO_MINIMO), getHeight());
+        setLocationRelativeTo(null);
+
+        panelCarta.setCarta(modelo.getCarta());
+        panelHistorial.setHistorial(new ArrayList<>(modelo.getHistorial()));
+
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         pack();
         // Mismo ancho para la vista de 2, 3 o 4 jugadores
@@ -87,11 +92,14 @@ public class FrmPartida extends JFrame implements IObservador {
         setLocationRelativeTo(null);
     }
 
-    private int cartasHistorial() {
+    private int cartasHistorial(IModelo modelo) {
         return switch (modelo.getNivel()) {
-            case BASICO -> 3;
-            case INTERMEDIO -> 2;
-            case EXPERTO -> 0;
+            case BASICO ->
+                3;
+            case INTERMEDIO ->
+                2;
+            case EXPERTO ->
+                0;
         };
     }
 
@@ -221,7 +229,6 @@ public class FrmPartida extends JFrame implements IObservador {
         SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, mensaje));
     }
 
-    
     static Font fuente(int tamano) {
         return new Font(FUENTE, Font.BOLD, tamano);
     }
@@ -341,7 +348,6 @@ public class FrmPartida extends JFrame implements IObservador {
         g2.dispose();
     }
 
-    
     private static class FondoRedondeado extends JPanel {
 
         FondoRedondeado() {

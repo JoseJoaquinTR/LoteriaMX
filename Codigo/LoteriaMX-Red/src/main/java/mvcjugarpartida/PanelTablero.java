@@ -1,4 +1,4 @@
-package loteriamx.vista;
+package mvcjugarpartida;
 
 import griton.dominio.Casilla;
 import griton.dominio.Tablero;

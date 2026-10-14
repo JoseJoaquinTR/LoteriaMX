@@ -1,4 +1,4 @@
-package loteriamx.modelo;
+package mvcjugarpartida;
 
 import griton.dominio.*;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class ModeloPartida implements IModelo {
 
     private final IDominio dominio;
     private IObservador observador;
-    private IEmisorRed emisorRed; 
+    private IEmisorRed emisorRed;
 
     private final Jugador jugadorLocal;
     private final Nivel nivel;
@@ -36,6 +36,7 @@ public class ModeloPartida implements IModelo {
 
     /**
      * Main suscribe a FrmPartida al crearla.
+     *
      * @param observador
      */
     public void agregarObserver(IObservador observador) {
@@ -45,6 +46,7 @@ public class ModeloPartida implements IModelo {
     /**
      * Conecta este modelo con la red entre jugadores ManejadorSocket la
      * implementa.
+     *
      * @param emisorRed
      */
     public void setEmisorRed(IEmisorRed emisorRed) {
@@ -138,7 +140,7 @@ public class ModeloPartida implements IModelo {
         jugadaActual = tipo;
         resultadoJugada = dominio.marcarJugada(jugadorLocal.getTablero(), jugadorLocal.getPuntaje(), tipo);
         idJugadorAfectado = jugadorLocal.getId();
-        if (null != resultadoJugada)
+        if (null != resultadoJugada) {
             switch (resultadoJugada) {
                 case MARCADA -> {
                     notificarJugada();
@@ -162,6 +164,7 @@ public class ModeloPartida implements IModelo {
                 default -> {
                 }
             }
+        }
     }
 
     // Flujo jugada de otro jugador 
@@ -186,7 +189,6 @@ public class ModeloPartida implements IModelo {
         mensaje = null;
         notificarTableroJugador();
     }
-
 
     //Getters que la vista jala despues de cada update() 
     public Carta getCarta() {

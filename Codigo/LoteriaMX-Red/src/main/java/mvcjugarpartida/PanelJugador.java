@@ -1,4 +1,4 @@
-package loteriamx.vista;
+package mvcjugarpartida;
 
 import griton.dominio.Jugador;
 import griton.dominio.Puntaje;

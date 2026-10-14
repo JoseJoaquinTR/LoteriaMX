@@ -2,10 +2,10 @@ package loteriamx;
 
 import griton.Mazo;
 import griton.dominio.*;
-import loteriamx.control.Controlador;
-import loteriamx.modelo.ModeloPartida;
+import mvcjugarpartida.Controlador;
+import mvcjugarpartida.ModeloPartida;
 import loteriamx.red.ClienteGriton;
-import loteriamx.vista.FrmPartida;
+import mvcjugarpartida.FrmPartida;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,7 +30,7 @@ public class Main {
         Controlador controlador = new Controlador(modelo);
 
         SwingUtilities.invokeLater(() -> {
-            FrmPartida frm = new FrmPartida(modelo, controlador);
+            FrmPartida frm = new FrmPartida( controlador);
             modelo.agregarObserver(frm);
             frm.setVisible(true);
             conectarGriton(modelo);

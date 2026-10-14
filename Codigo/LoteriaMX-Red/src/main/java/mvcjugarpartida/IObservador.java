@@ -1,4 +1,4 @@
-package loteriamx.modelo;
+package mvcjugarpartida;
 
 /**
  * Interfaz IObservador. 
@@ -16,4 +16,6 @@ public interface IObservador {
     public void updateTableroJugador(IModelo modelo);
 
     public void updateMensaje(IModelo modelo);
+    
+    public void updatePartida(IModelo modelo);
 }

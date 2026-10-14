@@ -1,4 +1,4 @@
-package loteriamx.modelo;
+package mvcjugarpartida;
 
 import griton.dominio.Casilla;
 import griton.dominio.TipoJugada;
