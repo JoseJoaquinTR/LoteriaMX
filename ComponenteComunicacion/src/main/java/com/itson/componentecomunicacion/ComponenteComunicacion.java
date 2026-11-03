@@ -5,7 +5,7 @@ import java.net.InetAddress;
 import java.util.Scanner;
 
 /**
- * Prueba del componente: mini chat por consola. Se corre dos veces y lo que se
+ * Prueba del componente mini chat por consola. Se corre dos veces y lo que se
  * escribe en una ventana aparece en la otra.
  */
 public class ComponenteComunicacion {
