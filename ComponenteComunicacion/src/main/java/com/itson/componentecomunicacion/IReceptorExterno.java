@@ -1,9 +1,10 @@
 package com.itson.componentecomunicacion;
 
 /**
- * Lo implementa la aplicacion que usa el componente.
+ * Observador del Receptor. Lo implementa la aplicacion que usa el componente
+ * y se le avisa cada vez que llegan bytes.
  */
 public interface IReceptorExterno {
 
-    public void recibir(Mensaje mensaje);
+    public void recibir(byte[] datos);
 }

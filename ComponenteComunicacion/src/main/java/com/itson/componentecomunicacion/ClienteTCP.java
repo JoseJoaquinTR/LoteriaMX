@@ -1,18 +1,20 @@
 package com.itson.componentecomunicacion;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 /**
- * Envia un mensaje con una conexion intermitente.
+ * Observador del Dispatcher: envia los bytes con una conexion intermitente
+ * (abre, escribe y cierra).
  */
-public class ClienteTCP {
+public class ClienteTCP implements IObservadorEnvio {
 
-    public void enviar(Mensaje mensaje) throws IOException {
-        try (Socket socket = new Socket(mensaje.getIpDestino(), mensaje.getPuertoDestino());
-                ObjectOutputStream salida = new ObjectOutputStream(socket.getOutputStream())) {
-            salida.writeObject(mensaje);
+    @Override
+    public void enviar(byte[] datos, String ip, int puerto) throws IOException {
+        try (Socket socket = new Socket(ip, puerto)) {
+            OutputStream salida = socket.getOutputStream();
+            salida.write(datos);
             salida.flush();
         }
     }

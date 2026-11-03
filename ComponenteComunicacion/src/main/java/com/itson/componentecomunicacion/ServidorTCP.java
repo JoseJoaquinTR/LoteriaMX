@@ -1,12 +1,12 @@
 package com.itson.componentecomunicacion;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
- * Escucha en un puerto. Conexion intermitente
+ * Escucha en un puerto. Conexion intermitente: por cada conexion lee todos los
+ * bytes hasta que el otro lado cierra y se los pasa al Receptor.
  */
 public class ServidorTCP {
 
@@ -32,11 +32,11 @@ public class ServidorTCP {
         ServerSocket servidor = new ServerSocket(puerto);
         Thread hilo = new Thread(() -> {
             while (!servidor.isClosed()) {
-                try (Socket conexion = servidor.accept();
-                        ObjectInputStream entrada = new ObjectInputStream(conexion.getInputStream())) {
-                    receptor.encolar((Mensaje) entrada.readObject());
-                } catch (IOException | ClassNotFoundException | ClassCastException e) {
-                    System.err.println("Mensaje invalido en el puerto " + puerto + ": " + e.getMessage());
+                try (Socket conexion = servidor.accept()) {
+                    byte[] datos = conexion.getInputStream().readAllBytes();
+                    receptor.encolar(datos);
+                } catch (IOException e) {
+                    System.err.println("Error al recibir en el puerto " + puerto + ": " + e.getMessage());
                 }
             }
         }, "ServidorTCP-" + puerto);

@@ -5,39 +5,53 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Cola de salida. enviar() solo encola y regresa de inmediato. Un hilo aparte
- * saca cada mensaje y lo manda con ClienteTCP.
+ * Sujeto del envio. enviar() solo encola los bytes y regresa de inmediato; un
+ * hilo aparte los saca y se los notifica al observador (ClienteTCP) junto con
+ * el destino fijo de este Dispatcher.
  */
 public class Dispatcher implements IDispatcher {
 
-    private final BlockingQueue<Mensaje> cola = new LinkedBlockingQueue<>();
-    private ClienteTCP clienteTCP;
+    private final BlockingQueue<byte[]> cola = new LinkedBlockingQueue<>();
+    private IObservadorEnvio observadorEnvio;
+    // volatile: se asignan desde la aplicacion y se leen en el hilo de envio
+    private volatile String ip;
+    private volatile int puerto;
 
-    public void setClienteTCP(ClienteTCP clienteTCP) {
-        this.clienteTCP = clienteTCP;
+    public void setObservadorEnvio(IObservadorEnvio observador) {
+        this.observadorEnvio = observador;
     }
 
     @Override
-    public void enviar(Mensaje mensaje) {
-        if (mensaje == null) {
-            throw new IllegalArgumentException("El mensaje no puede ser nulo");
+    public void setIp(String ip) {
+        this.ip = ip;
+    }
+
+    @Override
+    public void setPuerto(int puerto) {
+        this.puerto = puerto;
+    }
+
+    @Override
+    public void enviar(byte[] datos) {
+        if (datos == null) {
+            throw new IllegalArgumentException("Los datos no pueden ser nulos");
         }
-        cola.offer(mensaje);
+        cola.offer(datos);
     }
 
     public void iniciar() {
-        if (clienteTCP == null) {
-            throw new IllegalStateException("No se ha configurado el cliente TCP. Use setClienteTCP() primero.");
+        if (observadorEnvio == null) {
+            throw new IllegalStateException("No se ha configurado el observador de envio. Use setObservadorEnvio() primero.");
         }
         Thread hilo = new Thread(() -> {
             try {
                 while (true) {
-                    Mensaje mensaje = cola.take();
+                    byte[] datos = cola.take();
                     try {
-                        clienteTCP.enviar(mensaje);
+                        observadorEnvio.enviar(datos, ip, puerto);
                     } catch (IOException e) {
-                        // Si un destino no responde se descarta ese mensaje y se sigue con los demas
-                        System.err.println("No se pudo enviar " + mensaje + ": " + e.getMessage());
+                        // Si el destino no responde se descartan esos bytes y se sigue con los demas
+                        System.err.println("No se pudo enviar a " + ip + ":" + puerto + ": " + e.getMessage());
                     }
                 }
             } catch (InterruptedException e) {
