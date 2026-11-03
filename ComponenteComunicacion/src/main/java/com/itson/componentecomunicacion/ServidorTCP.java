@@ -34,7 +34,7 @@ public class ServidorTCP {
             while (!servidor.isClosed()) {
                 try (Socket conexion = servidor.accept()) {
                     byte[] datos = conexion.getInputStream().readAllBytes();
-                    receptor.encolar(datos);
+                    receptor.encolar(datos, conexion.getInetAddress().getHostAddress());
                 } catch (IOException e) {
                     System.err.println("Error al recibir en el puerto " + puerto + ": " + e.getMessage());
                 }

@@ -1,15 +1,14 @@
 package com.itson.componentecomunicacion;
 
 /**
- * Crea el Dispatcher, le inyecta por setter el observador que recibe (por
- * ejemplo, un ClienteTCP creado por la aplicacion) y lo arranca. La aplicacion
- * solo recibe IDispatcher.
+ * Crea el Dispatcher, le inyecta por setter la unica instancia de ClienteTCP
+ * como observador y lo arranca. La aplicacion solo recibe IDispatcher.
  */
 public class DispatcherFactory {
 
-    public IDispatcher crearDispatcher(IObservadorEnvio observador) {
+    public IDispatcher crearDispatcher() {
         Dispatcher dispatcher = new Dispatcher();
-        dispatcher.setObservadorEnvio(observador);
+        dispatcher.setObservadorEnvio(ClienteTCP.getInstance());
         dispatcher.iniciar();
         return dispatcher;
     }

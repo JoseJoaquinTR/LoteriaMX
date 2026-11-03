@@ -5,38 +5,38 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * Sujeto del envio. enviar() solo encola los bytes y regresa de inmediato; un
- * hilo aparte los saca y se los notifica al observador (ClienteTCP) junto con
- * el destino fijo de este Dispatcher.
+ * Sujeto del envio. enviar() solo encola y regresa de inmediato; un hilo aparte
+ * saca cada mensaje y se lo notifica al observador (ClienteTCP).
  */
 public class Dispatcher implements IDispatcher {
 
-    private final BlockingQueue<byte[]> cola = new LinkedBlockingQueue<>();
+    // Lo que espera en la cola: los bytes con su destino. Solo se usa aqui dentro.
+    private static class Mensaje {
+
+        private final byte[] datos;
+        private final String ip;
+        private final int puerto;
+
+        private Mensaje(byte[] datos, String ip, int puerto) {
+            this.datos = datos;
+            this.ip = ip;
+            this.puerto = puerto;
+        }
+    }
+
+    private final BlockingQueue<Mensaje> cola = new LinkedBlockingQueue<>();
     private IObservadorEnvio observadorEnvio;
-    // volatile: se asignan desde la aplicacion y se leen en el hilo de envio
-    private volatile String ip;
-    private volatile int puerto;
 
     public void setObservadorEnvio(IObservadorEnvio observador) {
         this.observadorEnvio = observador;
     }
 
     @Override
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    @Override
-    public void setPuerto(int puerto) {
-        this.puerto = puerto;
-    }
-
-    @Override
-    public void enviar(byte[] datos) {
+    public void enviar(byte[] datos, String ip, int puerto) {
         if (datos == null) {
             throw new IllegalArgumentException("Los datos no pueden ser nulos");
         }
-        cola.offer(datos);
+        cola.offer(new Mensaje(datos, ip, puerto));
     }
 
     public void iniciar() {
@@ -46,12 +46,12 @@ public class Dispatcher implements IDispatcher {
         Thread hilo = new Thread(() -> {
             try {
                 while (true) {
-                    byte[] datos = cola.take();
+                    Mensaje mensaje = cola.take();
                     try {
-                        observadorEnvio.enviar(datos, ip, puerto);
+                        observadorEnvio.enviar(mensaje.datos, mensaje.ip, mensaje.puerto);
                     } catch (IOException e) {
-                        // Si el destino no responde se descartan esos bytes y se sigue con los demas
-                        System.err.println("No se pudo enviar a " + ip + ":" + puerto + ": " + e.getMessage());
+                        // Si el destino no responde se descarta ese mensaje y se sigue con los demas
+                        System.err.println("No se pudo enviar a " + mensaje.ip + ":" + mensaje.puerto + ": " + e.getMessage());
                     }
                 }
             } catch (InterruptedException e) {
